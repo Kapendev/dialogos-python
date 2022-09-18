@@ -111,40 +111,44 @@ class Dialogue:
 
 
 def calc(s: str) -> Optional[float]:
+    result: Optional[float] = None
     args = s.strip().split(" ")
-    if len(args) == 3:
-        n1 = float(args[0])
-        op = args[1]
-        n2 = float(args[2])
-        if n1 is not None and n2 is not None:
-            if op == "+":
-                return n1 + n2
-            elif op == "-":
-                return n1 - n2
-            elif op == "*":
-                return n1 * n2
-            elif op == "/":
-                return n1 / n2
-            elif op == "%":
-                return n1 % n2
-            elif op == "<":
-                return float(n1 < n2)
-            elif op == ">":
-                return float(n1 > n2)
-            elif op == "<=":
-                return float(n1 <= n2)
-            elif op == ">=":
-                return float(n1 >= n2)
-            elif op == "==":
-                return float(n1 == n2)
-            elif op == "!=":
-                return float(n1 != n2)
-            else:
-                return None
-        else:
-            return None
-    else:
-        return None
+    if len(args) >= 3:
+        try:
+            result = float(args[0])
+            front = 0
+            while front + 2 < len(args):
+                op = args[front + 1]
+                n2 = float(args[front + 2])
+                if op == "+":
+                    result += n2
+                elif op == "-":
+                    result -= n2
+                elif op == "*":
+                    result *= n2
+                elif op == "/":
+                    result /= n2
+                elif op == "%":
+                    result %= n2
+                elif op == "<":
+                    result = float(result < n2)
+                elif op == ">":
+                    result = float(result > n2)
+                elif op == "<=":
+                    result = float(result <= n2)
+                elif op == ">=":
+                    result = float(result >= n2)
+                elif op == "==":
+                    result = float(result == n2)
+                elif op == "!=":
+                    result = float(result != n2)
+                else:
+                    result = None
+                    break
+                front += 2
+        except ValueError:
+            result = None
+    return result
 
 
 def split(s: str) -> List[str]:
