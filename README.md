@@ -10,13 +10,13 @@ For more complex games I would recommend extending Dialogos or using something e
 
 ```sh
 # clone the repo
-$ git clone https://github.com/AlexandrosKap/dialogos-python
+git clone https://github.com/AlexandrosKap/dialogos-python
 
 # change your working directory
-$ cd dialogos-python
+cd dialogos-python
 
 # install globally
-$ python3 -m pip install .
+python3 -m pip install .
 ```
 
 ## 🐈 Features
