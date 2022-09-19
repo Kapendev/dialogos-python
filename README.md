@@ -6,6 +6,19 @@ It's nothing special, but that's the point! It's something that just works.
 This library is ideal for games that are made for a game jam.
 For more complex games I would recommend extending Dialogos or using something else.
 
+## 📦 Installation
+
+```sh
+# clone the repo
+$ git clone https://github.com/AlexandrosKap/dialogos-python
+
+# change your working directory
+$ cd dialogos-python
+
+# install globally
+$ python3 -m pip install .
+```
+
 ## 🐈 Features
 
 - Easy to use
