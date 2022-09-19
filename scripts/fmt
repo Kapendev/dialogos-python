@@ -1,0 +1,18 @@
+#!/bin/env sh
+
+# Formats a Python project with mypy.
+
+command='black'
+
+path=$(pwd)
+while :; do
+    if [ -f $path/setup.py ]; then
+        $command $path
+        exit
+    fi
+    path=$path/..
+    if [ ! -d $path ]; then
+        echo "Working directory must be inside a Python project."
+        exit
+    fi
+done

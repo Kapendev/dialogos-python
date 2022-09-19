@@ -47,6 +47,7 @@ class Dialogue:
                 if value is not None:
                     result = result.replace(word, value)
             return result
+
         line = self.lines[self.index]
         return Line(line.t, replace(line.info), replace(line.content))
 

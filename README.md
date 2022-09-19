@@ -9,13 +9,13 @@ For more complex games I would recommend extending Dialogos or using something e
 ## 📦 Installation
 
 ```sh
-# clone the repo
+# Clone the repo.
 git clone https://github.com/AlexandrosKap/dialogos-python
 
-# change your working directory
+# Change your working directory.
 cd dialogos-python
 
-# install globally
+# Install the package globally.
 python3 -m pip install .
 ```
 
