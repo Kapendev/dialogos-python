@@ -20,7 +20,7 @@ def do_things(_: str) -> str:
     return ""
 
 
-d = Dialogue([])
+d = Dialogue()
 d.procedures["random_name"] = random_name
 d.procedures["do_things"] = do_things
 d.change(
