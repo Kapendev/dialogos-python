@@ -8,6 +8,7 @@ JUMP_LINE = 3
 MENU_LINE = 4
 VARIABLE_LINE = 5
 CHECK_LINE = 6
+COMMENT_LINE = 7
 
 SPLIT_PATTERN = "||"
 VARIABLE_PATTERN = r"__(\w+)"
@@ -95,7 +96,7 @@ class Dialogue:
 
     def update(self) -> None:
         line = self.line()
-        if line.t == LABEL_LINE:
+        if line.t == LABEL_LINE or line.t == COMMENT_LINE:
             self.next()
         elif line.t == JUMP_LINE:
             if line.content in self.labels:
@@ -191,3 +192,7 @@ def variable(info: str, content: str) -> Line:
 
 def check(content: str) -> Line:
     return Line(CHECK_LINE, "", content)
+
+
+def comment(content: str) -> Line:
+    return Line(COMMENT_LINE, "", content)
