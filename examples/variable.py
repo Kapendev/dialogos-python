@@ -1,5 +1,3 @@
-# Variable Example
-
 from dialogos import *
 
 

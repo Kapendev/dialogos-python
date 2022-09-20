@@ -6,7 +6,7 @@ command='mypy --pretty --strict --ignore-missing-imports'
 
 path=$(pwd)
 while :; do
-    if [ -f $path/setup.py ]; then
+    if [ -f $path/README.md ]; then
         $command $path
         exit
     fi

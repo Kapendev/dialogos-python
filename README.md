@@ -27,6 +27,7 @@ python3 -m pip install .
 - Variables
 - Mathematical operations
 - Conditional statements
+- Procedures
 
 ## 🐕 Example
 

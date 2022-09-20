@@ -1,5 +1,5 @@
 import re
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Callable
 
 END_LINE = 0
 TEXT_LINE = 1
@@ -10,7 +10,8 @@ VARIABLE_LINE = 5
 CHECK_LINE = 6
 
 SPLIT_PATTERN = "||"
-VARIABLE_PATTERN = r"__\w*"
+VARIABLE_PATTERN = r"__(\w+)"
+PROCEDURE_PATTERN = r"!!(\w+)\((\w*)\)"
 
 
 class Line:
@@ -31,6 +32,7 @@ class Dialogue:
         self.lines: List[Line] = []
         self.labels: Dict[str, int] = {}
         self.variables: Dict[str, str] = {}
+        self.procedures: Dict[str, Callable[[str], str]] = {}
         self.change(lines)
 
     def __repr__(self) -> str:
@@ -42,10 +44,17 @@ class Dialogue:
         def replace(s: str) -> str:
             result = s
             for match in re.finditer(VARIABLE_PATTERN, s):
-                word = match.group()
-                value = self.variables.get(word[2:])
-                if value is not None:
-                    result = result.replace(word, value)
+                target = match.group()
+                key = match.group(1)
+                if key in self.variables:
+                    result = result.replace(target, self.variables[key])
+            s = result
+            for match in re.finditer(PROCEDURE_PATTERN, s):
+                target = match.group()
+                key = match.group(1)
+                arg = match.group(2)
+                if key in self.procedures:
+                    result = result.replace(target, self.procedures[key](arg))
             return result
 
         line = self.lines[self.index]

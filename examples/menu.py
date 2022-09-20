@@ -1,5 +1,3 @@
-# Menu Example
-
 from dialogos import *
 
 

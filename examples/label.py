@@ -1,5 +1,3 @@
-# Label Example
-
 from dialogos import *
 
 

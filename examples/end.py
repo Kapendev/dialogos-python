@@ -1,5 +1,3 @@
-# End Example
-
 from dialogos import *
 
 
