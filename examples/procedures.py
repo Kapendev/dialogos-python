@@ -19,9 +19,9 @@ d = Dialogue([])
 d.procedures["random_name"] = random_name
 d.change(
     [
-        variable("actor", "__random_name()"),
+        variable("actor", "!!random_name()"),
         actor("Hi!"),
-        actor("I'm __actor and this is my friend __random_name(__actor)."),
+        actor("I'm __actor and this is my friend !!random_name(__actor)."),
     ]
 )
 
