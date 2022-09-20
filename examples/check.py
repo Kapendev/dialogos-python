@@ -8,14 +8,14 @@ def einstein(content: str) -> Line:
 d = Dialogue(
     [
         variable("val", "1 + 2"),
-        einstein("1 + 2 = __val"),
+        einstein("1 + 2 = $val"),
         einstein("And..."),
-        variable("val", "__val * __val"),
-        einstein("3 * 3 = __val"),
+        variable("val", "$val * $val"),
+        einstein("3 * 3 = $val"),
         # Check if the math is bad.
-        check("__val == 9"),
+        check("$val == 9"),
         einstein("I'm very good at math!"),
-        check("__val != 9"),
+        check("$val != 9"),
         einstein("I did something wrong?"),
     ]
 )

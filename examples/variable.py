@@ -6,7 +6,7 @@ def mia(content: str) -> Line:
 
 
 def alucard(content: str) -> Line:
-    return text("__name", content)
+    return text("$name", content)
 
 
 d = Dialogue(
@@ -15,7 +15,7 @@ d = Dialogue(
         mia("What's your name?"),
         alucard("They call me Alucard."),
         variable("name", "Alucard"),
-        mia("__name..."),
+        mia("$name..."),
         mia("HAHAHA!"),
         alucard("What?"),
     ]

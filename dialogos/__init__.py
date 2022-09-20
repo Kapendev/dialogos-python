@@ -18,8 +18,8 @@ CHECK_LINE = 6
 COMMENT_LINE = 7
 
 SPLIT_PATTERN = "||"
-VARIABLE_PATTERN = r"__(\w+)"
-PROCEDURE_PATTERN = r"!!(\w+)\((\w*)\)"
+VARIABLE_PATTERN = r"\$(\w+)"
+PROCEDURE_PATTERN = r"\$\$(\w+)\((\w*)\)"
 
 
 class Line:

@@ -3,7 +3,7 @@ from dialogos import *
 
 
 def actor(content: str) -> Line:
-    return text("__actor", content)
+    return text("$actor", content)
 
 
 def random_name(actor_name: str) -> str:
@@ -15,21 +15,23 @@ def random_name(actor_name: str) -> str:
     return name
 
 
-def do_things(_: str) -> str:
-    print("  (I'm doing things...)  ")
-    return ""
+def foo(s: str) -> str:
+    n = int(s)
+    print("  ({})(I'm doing things...)  ".format(n))
+    n -= 1
+    return str(n)
 
 
 d = Dialogue()
 d.procedures["random_name"] = random_name
-d.procedures["do_things"] = do_things
+d.procedures["foo"] = foo
 d.change(
     [
-        variable("actor", "!!random_name()"),
-        variable("friend", "!!random_name(__actor)"),
-        comment("!!do_things()"),
+        variable("actor", "$$random_name()"),
+        variable("friend", "$$random_name($actor)"),
+        comment("$$foo(1)"),
         actor("Hi!"),
-        actor("I'm __actor and this is my friend __friend."),
+        actor("I'm $actor and this is my friend $friend."),
     ]
 )
 
