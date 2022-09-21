@@ -73,6 +73,8 @@ class Dialogue:
     def add_procedures(self, procedures: Dict[str, Callable[[str], str]]) -> "Dialogue":
         """Adds new procedures to the dialogue."""
         self.procedures.update(procedures)
+        self.reset()
+        self.update()
         return self
 
     def change_lines(self, lines: List[Line]) -> "Dialogue":

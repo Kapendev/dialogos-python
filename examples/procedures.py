@@ -20,22 +20,18 @@ def foo(_: str) -> str:
     return ""
 
 
-d = (
-    Dialogue()
-    .add_procedures(
-        {
-            "random_name": random_name,
-            "foo": foo,
-        }
-    )
-    .change_lines(
-        [
-            variable("actor", "$random_name()"),
-            variable("friend", "$random_name($actor)"),
-            actor("$foo()Hi!"),
-            actor("I'm $actor and this is my friend $friend."),
-        ]
-    )
+d = Dialogue(
+    [
+        variable("actor", "$random_name()"),
+        variable("friend", "$random_name($actor)"),
+        actor("$foo()Hi!"),
+        actor("I'm $actor and this is my friend $friend."),
+    ]
+).add_procedures(
+    {
+        "random_name": random_name,
+        "foo": foo,
+    }
 )
 
 while not d.has_end():
