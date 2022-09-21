@@ -5,19 +5,15 @@ def mia(content: str) -> Line:
     return text("Mia", content)
 
 
-def alucard(content: str) -> Line:
-    return text("$name", content)
-
-
 d = Dialogue(
     [
-        variable("name", "???"),
+        variable("i", "0"),
         mia("What's your name?"),
-        alucard("They call me Alucard."),
-        variable("name", "Alucard"),
-        mia("$name..."),
-        mia("HAHAHA!"),
-        alucard("What?"),
+        variable("i", "$i + 1"),
+        mia("Do you like cats?"),
+        variable("i", "$i + 1"),
+        mia("..."),
+        mia("I asked $i questions."),
     ]
 )
 

@@ -52,41 +52,63 @@ class Dialogue:
         Variables store data and can be created inside and outside the dialogue.
         Procedures on the other hand, perform a task and can only be created outside the dialogue.
         """
-        self.index = 0
-        self.lines: List[Line] = []
-        self.labels: Dict[str, int] = {}
-        self.variables: Dict[str, str] = {}
-        self.procedures: Dict[str, Callable[[str], str]] = {}
+        self.__index = 0
+        self.__lines: List[Line] = []
+        self.__labels: Dict[str, int] = {}
+        self.__variables: Dict[str, str] = {}
+        self.__procedures: Dict[str, Callable[[str], str]] = {}
         if lines is not None:
             self.change_lines(lines)
 
     def __repr__(self) -> str:
         return "Dialogue(index: {}, lines: {}, labels: {}, variables: {})".format(
-            self.index, self.lines, self.labels, self.variables
+            self.__index, self.__lines, self.__labels, self.__variables
         )
 
     def add_variables(self, variables: Dict[str, str]) -> "Dialogue":
         """Adds new variables to the dialogue."""
-        self.variables.update(variables)
+        self.__variables.update(variables)
         return self
 
     def add_procedures(self, procedures: Dict[str, Callable[[str], str]]) -> "Dialogue":
         """Adds new procedures to the dialogue."""
-        self.procedures.update(procedures)
+        self.__procedures.update(procedures)
         self.reset()
-        self.update()
+        return self
+
+    def remove_variables(self, keys: List[str]) -> "Dialogue":
+        """Removes variables from the dialogue."""
+        for key in keys:
+            del self.__variables[key]
+        return self
+
+    def remove_procedures(self, keys: List[str]) -> "Dialogue":
+        """Removes procedures from the dialogue."""
+        for key in keys:
+            del self.__procedures[key]
+        return self
+
+    def change_variables(self, variables: Dict[str, str]) -> "Dialogue":
+        """Changes the variables of the dialogue."""
+        self.__variables = variables
+        return self
+
+    def change_procedures(
+        self, procedures: Dict[str, Callable[[str], str]]
+    ) -> "Dialogue":
+        """Changes the procedures of the dialogue."""
+        self.__procedures = procedures
         return self
 
     def change_lines(self, lines: List[Line]) -> "Dialogue":
         """Changes the lines of the dialogue."""
-        self.reset()
-        self.labels.clear()
-        self.lines = lines
-        for i, line in enumerate(self.lines):
+        self.__labels.clear()
+        self.__lines = lines
+        for i, line in enumerate(self.__lines):
             if line.t == LABEL_LINE:
-                self.labels[line.content] = i
-        self.lines.append(end())
-        self.update()
+                self.__labels[line.content] = i
+        self.__lines.append(end())
+        self.reset()
         return self
 
     def line(self) -> Line:
@@ -97,41 +119,49 @@ class Dialogue:
             for match in re.finditer(VARIABLE_PATTERN, s):
                 target = match.group()
                 key = match.group(1)
-                if key in self.variables:
-                    result = result.replace(target, self.variables[key])
+                if key in self.__variables:
+                    result = result.replace(target, self.__variables[key])
             s = result
             for match in re.finditer(PROCEDURE_PATTERN, s):
                 target = match.group()
                 key = match.group(1)
                 arg = match.group(2)
-                if key in self.procedures:
-                    result = result.replace(target, self.procedures[key](arg))
+                if key in self.__procedures:
+                    result = result.replace(target, self.__procedures[key](arg))
             return result
 
-        line = self.lines[self.index]
+        line = self.__lines[self.__index]
         return Line(line.t, replace(line.info), replace(line.content))
 
+    def goto(self, index: int) -> None:
+        "Goes to a specific line of the dialogue."
+        if index < 0:
+            self.__index = 0
+        elif index < len(self.__lines):
+            self.__index = index
+        else:
+            self.__index = len(self.__lines) - 1
+        self.__update()
+
     def next(self) -> None:
-        """Advances the index of the dialogue by one."""
-        self.index += 1
-        self.update()
+        """Goes to the next line of the dialogue."""
+        self.goto(self.__index + 1)
 
     def jump(self, label: str) -> None:
-        """Changes the index of the dialogue by using a label."""
-        self.index = self.labels[label]
-        self.update()
+        """Goes to a line of the dialogue by using a label."""
+        self.goto(self.__labels[label])
 
     def reset(self) -> None:
         """Resets the dialogue index."""
-        self.index = 0
+        self.goto(0)
 
     def has_end(self) -> bool:
         """Returns true if the current line of the dialogue is an end line."""
-        return self.lines[self.index].t == END_LINE
+        return self.__lines[self.__index].t == END_LINE
 
     def has_menu(self) -> bool:
         """Returns true if the current line of the dialogue is a menu line."""
-        return self.lines[self.index].t == MENU_LINE
+        return self.__lines[self.__index].t == MENU_LINE
 
     def choices(self) -> List[str]:
         """Returns the choices of a menu line
@@ -146,37 +176,36 @@ class Dialogue:
         """Chooses a label from the current menu line and jumps to it."""
         self.jump(split(self.line().info)[choice])
 
-    def update(self) -> None:
+    def __update(self) -> None:
         """Updates the dialogue state."""
         # Calling update should not call procedures
         # when a text line is processed.
-        line = self.lines[self.index]
+        line = self.__lines[self.__index]
         if line.t != TEXT_LINE:
             line = self.line()
         # Do something for some types.
         if line.t == LABEL_LINE or line.t == COMMENT_LINE:
             self.next()
         elif line.t == JUMP_LINE:
-            if line.content in self.labels:
+            if line.content in self.__labels:
                 self.jump(line.content)
             else:
                 self.next()
         elif line.t == VARIABLE_LINE:
             value = calc(line.content)
             if value is not None:
-                self.variables[line.info] = str(value)
+                self.__variables[line.info] = str(
+                    int(value) if value.is_integer() else value
+                )
             else:
-                self.variables[line.info] = line.content
+                self.__variables[line.info] = line.content
             self.next()
         elif line.t == CHECK_LINE:
             value = calc(line.content)
-            if value is not None and value != 0:
+            if value is not None and value != 0.0:
                 self.next()
             else:
-                self.index += 2
-                if self.index >= len(self.lines):
-                    self.index = len(self.lines) - 1
-                self.update()
+                self.goto(self.__index + 2)
 
 
 def calc(s: str) -> Optional[float]:

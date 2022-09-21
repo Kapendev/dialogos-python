@@ -11,6 +11,7 @@ while :; do
         [ -d build ] && rm -rf build
         [ -d $name.egg-info ] && rm -rf $name.egg-info
         [ -d .mypy_cache ] && rm -rf .mypy_cache
+        [ -d dialogos/__pycache__ ] && rm -rf dialogos/__pycache__
         exit
     fi
     path=$path/..
