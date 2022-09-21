@@ -211,7 +211,7 @@ class Dialogue:
 def calc(s: str) -> Optional[float]:
     """Parses and evaluates simple math expressions."""
     result: Optional[float] = None
-    args = s.strip().split(" ")
+    args = s.replace(" ", "")
     if len(args) >= 3:
         try:
             result = float(args[0])
