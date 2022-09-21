@@ -1,0 +1,21 @@
+#!/bin/env sh
+
+# Cleans a Python project.
+
+name=dialogos
+
+path=$(pwd)
+while :; do
+    if [ -f $path/README.md ]; then
+        cd $path
+        [ -d build ] && rm -rf build
+        [ -d $name.egg-info ] && rm -rf $name.egg-info
+        [ -d .mypy_cache ] && rm -rf .mypy_cache
+        exit
+    fi
+    path=$path/..
+    if [ ! -d $path ]; then
+        echo "Working directory must be inside a Python project."
+        exit
+    fi
+done

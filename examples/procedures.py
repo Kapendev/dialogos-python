@@ -15,24 +15,27 @@ def random_name(actor_name: str) -> str:
     return name
 
 
-def foo(s: str) -> str:
-    n = int(s)
-    print("  ({})(I'm doing things...)  ".format(n))
-    n -= 1
-    return str(n)
+def foo(_: str) -> str:
+    print("  (I'm doing things...)  ")
+    return ""
 
 
-d = Dialogue()
-d.procedures["random_name"] = random_name
-d.procedures["foo"] = foo
-d.change(
-    [
-        variable("actor", "$$random_name()"),
-        variable("friend", "$$random_name($actor)"),
-        comment("$$foo(1)"),
-        actor("Hi!"),
-        actor("I'm $actor and this is my friend $friend."),
-    ]
+d = (
+    Dialogue()
+    .add_procedures(
+        {
+            "random_name": random_name,
+            "foo": foo,
+        }
+    )
+    .change_lines(
+        [
+            variable("actor", "$random_name()"),
+            variable("friend", "$random_name($actor)"),
+            actor("$foo()Hi!"),
+            actor("I'm $actor and this is my friend $friend."),
+        ]
+    )
 )
 
 while not d.has_end():

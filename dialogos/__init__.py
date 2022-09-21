@@ -19,7 +19,7 @@ COMMENT_LINE = 7
 
 SPLIT_PATTERN = "||"
 VARIABLE_PATTERN = r"\$(\w+)"
-PROCEDURE_PATTERN = r"\$\$(\w+)\((\w*)\)"
+PROCEDURE_PATTERN = r"\$(\w+)\((.*)\)"
 
 
 class Line:
@@ -58,12 +58,34 @@ class Dialogue:
         self.variables: Dict[str, str] = {}
         self.procedures: Dict[str, Callable[[str], str]] = {}
         if lines is not None:
-            self.change(lines)
+            self.change_lines(lines)
 
     def __repr__(self) -> str:
         return "Dialogue(index: {}, lines: {}, labels: {}, variables: {})".format(
             self.index, self.lines, self.labels, self.variables
         )
+
+    def add_variables(self, variables: Dict[str, str]) -> "Dialogue":
+        """Adds new variables to the dialogue."""
+        self.variables.update(variables)
+        return self
+
+    def add_procedures(self, procedures: Dict[str, Callable[[str], str]]) -> "Dialogue":
+        """Adds new procedures to the dialogue."""
+        self.procedures.update(procedures)
+        return self
+
+    def change_lines(self, lines: List[Line]) -> "Dialogue":
+        """Changes the lines of the dialogue."""
+        self.reset()
+        self.labels.clear()
+        self.lines = lines
+        for i, line in enumerate(self.lines):
+            if line.t == LABEL_LINE:
+                self.labels[line.content] = i
+        self.lines.append(end())
+        self.update()
+        return self
 
     def line(self) -> Line:
         """Returns the current line of the dialogue."""
@@ -86,17 +108,6 @@ class Dialogue:
 
         line = self.lines[self.index]
         return Line(line.t, replace(line.info), replace(line.content))
-
-    def change(self, lines: List[Line]) -> None:
-        """Changes the lines of the dialogue."""
-        self.reset()
-        self.labels.clear()
-        self.lines = lines
-        for i, line in enumerate(self.lines):
-            if line.t == LABEL_LINE:
-                self.labels[line.content] = i
-        self.lines.append(end())
-        self.update()
 
     def next(self) -> None:
         """Advances the index of the dialogue by one."""
@@ -135,7 +146,12 @@ class Dialogue:
 
     def update(self) -> None:
         """Updates the dialogue state."""
-        line = self.line()
+        # Calling update should not call procedures
+        # when a text line is processed.
+        line = self.lines[self.index]
+        if line.t != TEXT_LINE:
+            line = self.line()
+        # Do something for some types.
         if line.t == LABEL_LINE or line.t == COMMENT_LINE:
             self.next()
         elif line.t == JUMP_LINE:
