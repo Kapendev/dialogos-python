@@ -20,6 +20,7 @@ COMMENT_LINE = 7
 SPLIT_PATTERN = "||"
 VARIABLE_PATTERN = r"\$(\w+)"
 PROCEDURE_PATTERN = r"\$(\w+)\((.*)\)"
+OPERATIONS = ("+", "-", "*", "//", "/", "%", "<=", "<", ">=", ">", "==", "!=")
 
 
 class Line:
@@ -65,14 +66,14 @@ class Dialogue:
             self.__index, self.__lines, self.__labels, self.__variables
         )
 
-    def add_variables(self, variables: Dict[str, str]) -> "Dialogue":
+    def add_variables(self, new: Dict[str, str]) -> "Dialogue":
         """Adds new variables to the dialogue."""
-        self.__variables.update(variables)
+        self.__variables.update(new)
         return self
 
-    def add_procedures(self, procedures: Dict[str, Callable[[str], str]]) -> "Dialogue":
+    def add_procedures(self, new: Dict[str, Callable[[str], str]]) -> "Dialogue":
         """Adds new procedures to the dialogue."""
-        self.__procedures.update(procedures)
+        self.__procedures.update(new)
         self.reset()
         return self
 
@@ -88,22 +89,20 @@ class Dialogue:
             del self.__procedures[key]
         return self
 
-    def change_variables(self, variables: Dict[str, str]) -> "Dialogue":
+    def change_variables(self, new: Dict[str, str]) -> "Dialogue":
         """Changes the variables of the dialogue."""
-        self.__variables = variables
+        self.__variables = new
         return self
 
-    def change_procedures(
-        self, procedures: Dict[str, Callable[[str], str]]
-    ) -> "Dialogue":
+    def change_procedures(self, new: Dict[str, Callable[[str], str]]) -> "Dialogue":
         """Changes the procedures of the dialogue."""
-        self.__procedures = procedures
+        self.__procedures = new
         return self
 
-    def change_lines(self, lines: List[Line]) -> "Dialogue":
+    def change_lines(self, new: List[Line]) -> "Dialogue":
         """Changes the lines of the dialogue."""
         self.__labels.clear()
-        self.__lines = lines
+        self.__lines = new
         for i, line in enumerate(self.__lines):
             if line.t == LABEL_LINE:
                 self.__labels[line.content] = i
@@ -164,9 +163,7 @@ class Dialogue:
         return self.__lines[self.__index].t == MENU_LINE
 
     def choices(self) -> List[str]:
-        """Returns the choices of a menu line
-        if the current line of the dialogue is a menu line.
-        """
+        """Returns the choices of a menu line if the current line of the dialogue is a menu line."""
         line = self.line()
         if line.t == MENU_LINE:
             return split(line.content)
@@ -209,45 +206,60 @@ class Dialogue:
 
 
 def calc(s: str) -> Optional[float]:
-    """Parses and evaluates simple math expressions."""
-    result: Optional[float] = None
+    """
+    Parses and evaluates simple math expressions.
+    Expressions with parentheses are not supported.
+
+    Supported operators: +, -, *, //, /, %, <=, <, >=, >, ==, !=
+    """
     args = s.replace(" ", "")
-    if len(args) >= 3:
-        try:
-            result = float(args[0])
-            front = 0
-            while front + 2 < len(args):
-                op = args[front + 1]
-                n2 = float(args[front + 2])
-                if op == "+":
-                    result += n2
-                elif op == "-":
-                    result -= n2
-                elif op == "*":
-                    result *= n2
-                elif op == "/":
-                    result /= n2
-                elif op == "%":
-                    result %= n2
-                elif op == "<":
-                    result = float(result < n2)
-                elif op == ">":
-                    result = float(result > n2)
-                elif op == "<=":
-                    result = float(result <= n2)
-                elif op == ">=":
-                    result = float(result >= n2)
-                elif op == "==":
-                    result = float(result == n2)
-                elif op == "!=":
-                    result = float(result != n2)
-                else:
-                    result = None
-                    break
-                front += 2
-        except ValueError:
-            result = None
-    return result
+    temp = args
+    for op in OPERATIONS:
+        temp = temp.replace(op, " ")
+    ns = temp.split(" ")
+    temp = args
+    for nn in ns:
+        temp = temp.replace(nn, " ", 1)
+    ops = [op for op in temp.split(" ") if op]
+
+    if not ns or not ops or len(ns) != len(ops) + 1:
+        return None
+    try:
+        stack: List[float] = [float(ns[0])]
+        i = 0
+        while i < len(ops):
+            op = ops[i]
+            n = float(ns[i + 1])
+            if op == "+":
+                stack.append(n)
+            elif op == "-":
+                stack.append(-n)
+            elif op == "*":
+                stack[-1] *= n
+            elif op == "/":
+                stack[-1] /= n
+            elif op == "//":
+                stack[-1] //= n
+            elif op == "%":
+                stack[-1] %= n
+            elif op == "<":
+                stack[-1] = float(stack[-1] < n)
+            elif op == "<=":
+                stack[-1] = float(stack[-1] <= n)
+            elif op == ">":
+                stack[-1] = float(stack[-1] > n)
+            elif op == ">=":
+                stack[-1] = float(stack[-1] >= n)
+            elif op == "==":
+                stack[-1] = float(stack[-1] == n)
+            elif op == "!=":
+                stack[-1] = float(stack[-1] != n)
+            else:
+                return None
+            i += 1
+        return sum(stack)
+    except ValueError:
+        return None
 
 
 def split(s: str) -> List[str]:
