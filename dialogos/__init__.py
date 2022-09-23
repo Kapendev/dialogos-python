@@ -20,7 +20,6 @@ COMMENT_LINE = 7
 SPLIT_PATTERN = "||"
 VARIABLE_PATTERN = r"\$(\w+)"
 PROCEDURE_PATTERN = r"\$(\w+)\((.*)\)"
-OPERATIONS = ("+", "-", "*", "//", "/", "%", "<=", "<", ">=", ">", "==", "!=")
 
 
 class Line:
@@ -205,6 +204,36 @@ class Dialogue:
                 self.goto(self.__index + 2)
 
 
+def __expr(a: float, op: str, b: float) -> Optional[float]:
+    """
+    The calculation part of the calc function.
+
+    Synthels: 'Bruh dude just use a dictionary with lambdas! 🤓'
+    """
+    if op == "*":
+        return a * b
+    elif op == "//":
+        return a // b
+    elif op == "/":
+        return a / b
+    elif op == "%":
+        return a % b
+    elif op == "<=":
+        return a <= b
+    elif op == "<":
+        return a < b
+    elif op == ">=":
+        return a >= b
+    elif op == ">":
+        return a > b
+    elif op == "==":
+        return a == b
+    elif op == "!=":
+        return a != b
+    else:
+        return None
+
+
 def calc(s: str) -> Optional[float]:
     """
     Parses and evaluates simple math expressions.
@@ -212,50 +241,58 @@ def calc(s: str) -> Optional[float]:
 
     Supported operators: +, -, *, //, /, %, <=, <, >=, >, ==, !=
     """
-    args = s.replace(" ", "")
-    temp = args
-    for op in OPERATIONS:
-        temp = temp.replace(op, " ")
-    ns = temp.split(" ")
-    temp = args
-    for nn in ns:
-        temp = temp.replace(nn, " ", 1)
-    ops = [op for op in temp.split(" ") if op]
-
-    if not ns or not ops or len(ns) != len(ops) + 1:
-        return None
+    args = s.replace(" ", "") + "+0"
+    print(args)
     try:
-        stack: List[float] = [float(ns[0])]
+        stack: List[float] = []
+        r_op = "+"
+        buffer = ""
         i = 0
-        while i < len(ops):
-            op = ops[i]
-            n = float(ns[i + 1])
-            if op == "+":
-                stack.append(n)
-            elif op == "-":
-                stack.append(-n)
-            elif op == "*":
-                stack[-1] *= n
-            elif op == "/":
-                stack[-1] /= n
-            elif op == "//":
-                stack[-1] //= n
-            elif op == "%":
-                stack[-1] %= n
-            elif op == "<":
-                stack[-1] = float(stack[-1] < n)
-            elif op == "<=":
-                stack[-1] = float(stack[-1] <= n)
-            elif op == ">":
-                stack[-1] = float(stack[-1] > n)
-            elif op == ">=":
-                stack[-1] = float(stack[-1] >= n)
-            elif op == "==":
-                stack[-1] = float(stack[-1] == n)
-            elif op == "!=":
-                stack[-1] = float(stack[-1] != n)
+        while i < len(args):
+            if args[i] in "0123456789":
+                buffer += args[i]
             else:
-                return None
+                l_op = r_op
+                r_op = args[i]
+                n = float(buffer) if buffer else None
+
+                # Calculate expression inside parentheses.
+                # TODO: SOMETHING IS RETURNING THAT SHOULD NOT RETURN
+                if n is None:
+                    if r_op == "(" and i + 1 < len(args):
+                        n = calc(args[i + 1 :])
+                        if n is None:
+                            return None
+                        # Find the position of ')'.
+                        counter = 0
+                        j = i + 1
+                        while j < len(args):
+                            if args[j] == "(":
+                                counter += 1
+                            elif args[j] == ")":
+                                if counter == 0:
+                                    break
+                                counter -= 1
+                            j += 1
+                        # Skip all the characters in parentheses.
+                        i += j - i
+                    elif l_op == ")":
+                        return sum(stack)
+                    else:
+                        return None
+
+                # Calculate expression.
+                if l_op == "+":
+                    stack.append(n)
+                elif l_op == "-":
+                    stack.append(-n)
+                else:
+                    value = __expr(stack[-1], l_op, n)
+                    if not value:
+                        return None
+                    else:
+                        stack[-1] = value
+                buffer = ""
             i += 1
         return sum(stack)
     except ValueError:
