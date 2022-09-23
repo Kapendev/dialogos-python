@@ -1,15 +1,9 @@
 from dialogos import *
 
-
-def alex(content: str) -> Line:
-    return text("Alex", content)
-
-
 d = Dialogue(
     [
-        alex("Hello world."),
-        alex("Something something."),
-        alex("The end."),
+        text("uwu", "My recomendation is..."),
+        text("owo", "ubunchu!"),
     ]
 )
 

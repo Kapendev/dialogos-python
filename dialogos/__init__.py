@@ -242,7 +242,6 @@ def calc(s: str) -> Optional[float]:
     Supported operators: +, -, *, //, /, %, <=, <, >=, >, ==, !=
     """
     args = s.replace(" ", "") + "+0"
-    print(args)
     try:
         stack: List[float] = []
         r_op = "+"
@@ -257,27 +256,25 @@ def calc(s: str) -> Optional[float]:
                 n = float(buffer) if buffer else None
 
                 # Calculate expression inside parentheses.
-                # TODO: SOMETHING IS RETURNING THAT SHOULD NOT RETURN
+                # TODO: SOMETHING AAAAAAAAAAAA
                 if n is None:
                     if r_op == "(" and i + 1 < len(args):
-                        n = calc(args[i + 1 :])
-                        if n is None:
-                            return None
                         # Find the position of ')'.
-                        counter = 0
+                        count = 0
                         j = i + 1
                         while j < len(args):
                             if args[j] == "(":
-                                counter += 1
+                                count += 1
                             elif args[j] == ")":
-                                if counter == 0:
+                                if count == 0:
                                     break
-                                counter -= 1
+                                count -= 1
                             j += 1
-                        # Skip all the characters in parentheses.
-                        i += j - i
-                    elif l_op == ")":
-                        return sum(stack)
+                        # Calculate and skip the characters in parentheses.
+                        n = calc(args[i + 1 : j])
+                        if n is None:
+                            return None
+                        i += j - i + 1
                     else:
                         return None
 
