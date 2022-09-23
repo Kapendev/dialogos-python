@@ -8,14 +8,14 @@ def gigi(content: str) -> Line:
 d = Dialogue(
     [
         gigi("What should I do?"),
-        menu("Coffee||Tea||Sleep", "Drink coffee.||Drink tea.||Go sleep."),
-        label("Coffee"),
+        menu("COFFEE||TEA||SLEEP", "Drink coffee.||Drink tea.||Go sleep."),
+        label("COFFEE"),
         gigi("I drink the coffee."),
         end(),
-        label("Tea"),
+        label("TEA"),
         gigi("I drink the tea."),
         end(),
-        label("Sleep"),
+        label("SLEEP"),
         gigi("I drink the sleep."),
     ]
 )
@@ -24,8 +24,8 @@ while not d.has_end():
     while d.has_menu():
         print()
         for i, choice in enumerate(d.choices()):
-            print("{} => {}".format(i + 1, choice))
-        print("(Default choice is 1.)\n")
+            print("({}) => {}".format(i, choice))
+        print("(Default choice is (0).)\n")
         d.choose(0)
     line = d.line()
     print("{}: {}".format(line.info, line.content))

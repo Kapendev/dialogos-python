@@ -31,7 +31,7 @@ python3 -m pip install .
 
 ## 🐕 Examples
 
-A Hello World example
+### Hello World
 
 ```python
 from dialogos import *
@@ -50,7 +50,7 @@ while not d.has_end():
     d.next()
 ```
 
-A Menu example
+### Menu
 
 ```python
 from dialogos import *
@@ -59,14 +59,14 @@ def gigi(content: str) -> Line: return text("Gigi", content)
 
 d = Dialogue([
     gigi("What should I do?"),
-    menu("Coffee||Tea||Sleep", "Drink coffee.||Drink tea.||Go sleep."),
-    label("Coffee"),
+    menu("COFFEE||TEA||SLEEP", "Drink coffee.||Drink tea.||Go sleep."),
+    label("COFFEE"),
     gigi("I drink the coffee."),
     end(),
-    label("Tea"),
+    label("TEA"),
     gigi("I drink the tea."),
     end(),
-    label("Sleep"),
+    label("SLEEP"),
     gigi("I drink the sleep."),
 ])
 
