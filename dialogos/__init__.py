@@ -1,8 +1,5 @@
 """
-A super simple dialogue system for Python.
-
-This module contains all the structures and functions needed
-to create a dialogue for a game.
+.. include:: ../README.md
 """
 
 import re
@@ -32,8 +29,11 @@ class Line:
         Each line has a type and some information that defines how its content will be used by a system.
         """
         self.t = t
+        """The line type."""
         self.info = info
+        """The line information."""
         self.content = content
+        """The content of the line."""
 
     def __repr__(self) -> str:
         return "Line(t: {}, info: '{}', content: '{}')".format(
@@ -204,6 +204,9 @@ class Dialogue:
                 self.goto(self.__index + 2)
 
 
+# Functions for processing strings.
+
+
 def __expr(a: float, op: str, b: float) -> Optional[float]:
     """
     The calculation part of the calc function.
@@ -296,6 +299,9 @@ def calc(s: str) -> Optional[float]:
 def split(s: str) -> List[str]:
     """Splits a string with the dialogue split pattern."""
     return s.strip().split(SPLIT_PATTERN)
+
+
+# Functions for creating lines.
 
 
 def end() -> Line:

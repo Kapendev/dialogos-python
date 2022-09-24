@@ -4,24 +4,7 @@ A super simple dialogue system for Python.
 
 It's nothing special, but that's the point! It's something that just works.
 This library is ideal for games that are made for a game jam.
-For more complex games I would recommend extending Dialogos or using something else.
-
-## 📦 Installation
-
-```sh
-# Clone the repo.
-git clone https://github.com/AlexandrosKap/dialogos-python
-
-# Change your working directory.
-cd dialogos-python
-
-# Install the package globally.
-python3 -m pip install .
-
-# Run an example.
-cd examples
-python3 hello.py
-```
+For more complex games it is recommended to extend Dialogos or use something else.
 
 ## 🐈 Features
 
@@ -29,9 +12,10 @@ python3 hello.py
 - Labels
 - Menus
 - Variables
-- Mathematical operations
-- Conditional statements
 - Procedures
+- Conditional statements
+- Mathematical operations
+- Syntax inspired by Assembly
 
 ## 🐕 Hello World Example
 
@@ -48,6 +32,16 @@ while not d.has_end():
     line = d.line()
     print("{}: {}".format(line.info, line.content))
     d.next()
+```
+
+## 📦 Installation
+
+```sh
+# Clone the repository.
+git clone https://github.com/AlexandrosKap/dialogos-python
+
+# Install the package globally.
+python3 -m pip install dialogos-python
 ```
 
 ## 🐍 Info
