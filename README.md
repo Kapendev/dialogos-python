@@ -17,6 +17,10 @@ cd dialogos-python
 
 # Install the package globally.
 python3 -m pip install .
+
+# Run an example.
+cd examples
+python3 hello.py
 ```
 
 ## 🐈 Features
@@ -29,54 +33,18 @@ python3 -m pip install .
 - Conditional statements
 - Procedures
 
-## 🐕 Examples
-
-### Hello World
+## 🐕 Hello World Example
 
 ```python
 from dialogos import *
 
-def alex(content): return text("Alex", content)
-
 d = Dialogue([
-    alex("Hello world."),
-    alex("Something something."),
-    alex("The end."),
+    # A line has info and content.
+    text("uwu", "My recomendation is..."),
+    text("owo", "ubunchu!"),
 ])
 
 while not d.has_end():
-    line = d.line()
-    print("{}: {}".format(line.info, line.content))
-    d.next()
-```
-
-### Menu
-
-```python
-from dialogos import *
-
-def gigi(content: str) -> Line: return text("Gigi", content)
-
-d = Dialogue([
-    gigi("What should I do?"),
-    menu("COFFEE||TEA||SLEEP", "Drink coffee.||Drink tea.||Go sleep."),
-    label("COFFEE"),
-    gigi("I drink the coffee."),
-    end(),
-    label("TEA"),
-    gigi("I drink the tea."),
-    end(),
-    label("SLEEP"),
-    gigi("I drink the sleep."),
-])
-
-while not d.has_end():
-    while d.has_menu():
-        print()
-        for i, choice in enumerate(d.choices()):
-            print("({}) => {}".format(i, choice))
-        print("(Default choice is (0).)\n")
-        d.choose(0)
     line = d.line()
     print("{}: {}".format(line.info, line.content))
     d.next()

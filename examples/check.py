@@ -7,15 +7,16 @@ def einstein(content: str) -> Line:
 
 d = Dialogue(
     [
-        variable("val", "1 + 2"),
-        einstein("1 + 2 = $val"),
+        variable("n", "1 + 2"),
+        einstein("1 + 2 = $n"),
         einstein("And..."),
-        variable("val", "$val * $val"),
-        einstein("3 * 3 = $val"),
-        # Check if the math is bad.
-        check("$val == 9"),
+        variable("n", "$n * $n"),
+        einstein("3 * 3 = $n"),
+        # Skip a line if '$n = 9' is not true.
+        check("$n = 9"),
         einstein("I'm very good at math!"),
-        check("$val != 9"),
+        # Skip a line if '$n ! 9' is not true.
+        check("$n ! 9"),
         einstein("I did something wrong?"),
     ]
 )

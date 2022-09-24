@@ -7,10 +7,12 @@ def momo(content: str) -> Line:
 
 d = Dialogue(
     [
-        momo("Hello world."),
+        momo("Hi!"),
+        # End the dialogue.
         end(),
-        momo("Something something."),
-        momo("The end."),
+        momo("Can you see me?"),
+        momo("No?"),
+        momo("..."),
     ]
 )
 

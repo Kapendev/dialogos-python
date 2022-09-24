@@ -8,6 +8,7 @@ def gigi(content: str) -> Line:
 d = Dialogue(
     [
         gigi("What should I do?"),
+        # Jump to the label COFFE, TEA or SLEEP.
         menu("COFFEE||TEA||SLEEP", "Drink coffee.||Drink tea.||Go sleep."),
         label("COFFEE"),
         gigi("I drink the coffee."),

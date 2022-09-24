@@ -7,13 +7,16 @@ def mia(content: str) -> Line:
 
 d = Dialogue(
     [
-        variable("i", "0"),
+        # Create variable.
+        variable("count", "0"),
         mia("What's your name?"),
-        variable("i", "$i + 1"),
+        # Change variable.
+        variable("count", "$count + 1"),
         mia("Do you like cats?"),
-        variable("i", "$i + 1"),
+        variable("count", "$count + 1"),
         mia("..."),
-        mia("I asked $i questions."),
+        # Use variable with the '$' character.
+        mia("I asked $count questions."),
     ]
 )
 

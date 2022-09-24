@@ -6,9 +6,9 @@ def actor(content: str) -> Line:
     return text("$actor", content)
 
 
-def random_name(actor_name: str) -> str:
-    name = actor_name
-    while name == actor_name:
+def random_name(reserved_name: str) -> str:
+    name = reserved_name
+    while name == reserved_name:
         name = random.choice(
             ("Liam", "Charlotte", "Oliver", "Amelia", "Elijah", "Noah")
         )
@@ -22,6 +22,7 @@ def foo(_: str) -> str:
 
 d = Dialogue(
     [
+        # Use procedures.
         variable("actor", "$random_name()"),
         variable("friend", "$random_name($actor)"),
         actor("$foo()Hi!"),
@@ -29,6 +30,7 @@ d = Dialogue(
     ]
 ).add_procedures(
     {
+        # Create procedures.
         "random_name": random_name,
         "foo": foo,
     }

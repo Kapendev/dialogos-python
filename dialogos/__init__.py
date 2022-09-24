@@ -208,27 +208,26 @@ def __expr(a: float, op: str, b: float) -> Optional[float]:
     """
     The calculation part of the calc function.
 
-    Synthels: 'Bruh dude just use a dictionary with lambdas! 🤓'
+    Synthels quotes:
+    - 🤓 'Bruh dude just use a dictionary with lambdas!'
+    - 😎 'Bro you can use a tokenizer module...'
+    - 😂 'Your implementation simply calculates each thing in a list in order.'
     """
     if op == "*":
         return a * b
-    elif op == "//":
-        return a // b
     elif op == "/":
         return a / b
+    elif op == ":":
+        return a // b
     elif op == "%":
         return a % b
-    elif op == "<=":
-        return a <= b
     elif op == "<":
         return a < b
-    elif op == ">=":
-        return a >= b
     elif op == ">":
         return a > b
-    elif op == "==":
+    elif op == "=":
         return a == b
-    elif op == "!=":
+    elif op == "!":
         return a != b
     else:
         return None
@@ -237,13 +236,12 @@ def __expr(a: float, op: str, b: float) -> Optional[float]:
 def calc(s: str) -> Optional[float]:
     """
     Parses and evaluates simple math expressions.
-    Expressions with parentheses are not supported.
 
-    Supported operators: +, -, *, //, /, %, <=, <, >=, >, ==, !=
+    Supported operators: +, -, *, /, :, %, <, >, =, !
     """
     args = s.replace(" ", "") + "+0"
     try:
-        stack: List[float] = []
+        stack: List[float] = [0]
         r_op = "+"
         buffer = ""
         i = 0
@@ -256,7 +254,6 @@ def calc(s: str) -> Optional[float]:
                 n = float(buffer) if buffer else None
 
                 # Calculate expression inside parentheses.
-                # TODO: SOMETHING AAAAAAAAAAAA
                 if n is None:
                     if r_op == "(" and i + 1 < len(args):
                         # Find the position of ')'.
@@ -270,11 +267,12 @@ def calc(s: str) -> Optional[float]:
                                     break
                                 count -= 1
                             j += 1
-                        # Calculate and skip the characters in parentheses.
+                        # Skip the characters in parentheses.
                         n = calc(args[i + 1 : j])
-                        if n is None:
+                        i = j + 1
+                        if n is None or i >= len(args):
                             return None
-                        i += j - i + 1
+                        r_op = args[i]
                     else:
                         return None
 
@@ -285,10 +283,9 @@ def calc(s: str) -> Optional[float]:
                     stack.append(-n)
                 else:
                     value = __expr(stack[-1], l_op, n)
-                    if not value:
+                    if value is None:
                         return None
-                    else:
-                        stack[-1] = value
+                    stack[-1] = value
                 buffer = ""
             i += 1
         return sum(stack)
