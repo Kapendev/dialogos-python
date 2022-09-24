@@ -41,7 +41,8 @@ while not d.has_end():
 git clone https://github.com/AlexandrosKap/dialogos-python
 
 # Install the package globally.
-python3 -m pip install dialogos-python
+cd dialogos-python
+python3 -m pip install .
 ```
 
 ## 🐍 Info
