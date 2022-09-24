@@ -222,13 +222,13 @@ def __expr(a: float, op: str, b: float) -> Optional[float]:
     elif op == "%":
         return a % b
     elif op == "<":
-        return a < b
+        return float(a < b)
     elif op == ">":
-        return a > b
+        return float(a > b)
     elif op == "=":
-        return a == b
+        return float(a == b)
     elif op == "!":
-        return a != b
+        return float(a != b)
     else:
         return None
 
