@@ -31,7 +31,7 @@ class Line:
         self.t = t
         """The line type."""
         self.info = info
-        """The line information."""
+        """The line info."""
         self.content = content
         """The content of the line."""
 

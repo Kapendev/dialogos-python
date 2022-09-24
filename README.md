@@ -44,7 +44,3 @@ git clone https://github.com/AlexandrosKap/dialogos-python
 cd dialogos-python
 python3 -m pip install .
 ```
-
-## 🐍 Info
-
-This is a port of the [original](https://github.com/AlexandrosKap/dialogos) version written in Rust.
