@@ -39,6 +39,9 @@ while not d.has_end():
 
 ## 📦 Installation
 
+Install the package globally.
+Windows users may have to write python instead of python3.
+
 ```sh
 python3 -m pip install git+https://github.com/AlexandrosKap/dialogos-python.git
 ```
