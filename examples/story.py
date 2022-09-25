@@ -143,7 +143,6 @@ The meeting was a success!"""
 
 print()
 while not d.has_end():
-
     while d.has_menu():
         print()
         choices = d.choices()
@@ -156,7 +155,6 @@ while not d.has_end():
                 option = int(s) - 1
         d.choose(option)
         print()
-
     line = d.line()
     print("{}: {}".format(line.info, line.content))
     d.next()

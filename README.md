@@ -17,7 +17,10 @@ For more complex games it is recommended to extend Dialogos or use something els
 - Mathematical operations
 - Syntax inspired by Assembly
 
-## 🐕 Hello World Example
+## 🐕 Example
+
+A hello-world example.
+More examples can be found in the examples folder.
 
 ```python
 from dialogos import *
@@ -37,10 +40,9 @@ while not d.has_end():
 ## 📦 Installation
 
 ```sh
-# Clone the repository.
-git clone https://github.com/AlexandrosKap/dialogos-python
-
-# Install the package globally.
-cd dialogos-python
-python3 -m pip install .
+python3 -m pip install git+https://github.com/AlexandrosKap/dialogos-python.git
 ```
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
