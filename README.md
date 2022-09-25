@@ -2,9 +2,8 @@
 
 A super simple dialogue system for Python.
 
-It's nothing special, but that's the point! It's something that just works.
-This library is ideal for games that are made for a game jam.
-For more complex games it is recommended to extend Dialogos or use something else.
+The library provides the essential tools needed to create a dialogue for a game, allowing you to focus on the specific needs of your project.
+It is simple by default, but can easily be extended to something powerful when needed.
 
 ## 🐈 Features
 
@@ -46,6 +45,7 @@ Windows users may have to write python instead of python3.
 python3 -m pip install git+https://github.com/AlexandrosKap/dialogos-python.git
 ```
 
-## License
+## 📜 License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+The project is released under the terms of the MIT License.
+Please refer to the LICENSE file.
