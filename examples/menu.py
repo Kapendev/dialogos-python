@@ -25,8 +25,8 @@ while not d.has_end():
     while d.has_menu():
         print()
         for i, choice in enumerate(d.choices()):
-            print("({}) => {}".format(i, choice))
-        print("(Default choice is (0).)\n")
+            print("{}| {}".format(i + 1, choice))
+        print("Default choice: (1)\n")
         d.choose(0)
     line = d.line()
     print("{}: {}".format(line.info, line.content))

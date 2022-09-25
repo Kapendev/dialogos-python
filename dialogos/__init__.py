@@ -109,27 +109,27 @@ class Dialogue:
         self.reset()
         return self
 
+    def __replace(self, s: str) -> str:
+        """Replace parts of a string with values from variables and procedures."""
+        result = s
+        for match in re.finditer(VARIABLE_PATTERN, s):
+            target = match.group()
+            key = match.group(1)
+            if key in self.__variables:
+                result = result.replace(target, self.__variables[key])
+        s = result
+        for match in re.finditer(PROCEDURE_PATTERN, s):
+            target = match.group()
+            key = match.group(1)
+            arg = match.group(2)
+            if key in self.__procedures:
+                result = result.replace(target, self.__procedures[key](arg))
+        return result
+
     def line(self) -> Line:
         """Returns the current line of the dialogue."""
-
-        def replace(s: str) -> str:
-            result = s
-            for match in re.finditer(VARIABLE_PATTERN, s):
-                target = match.group()
-                key = match.group(1)
-                if key in self.__variables:
-                    result = result.replace(target, self.__variables[key])
-            s = result
-            for match in re.finditer(PROCEDURE_PATTERN, s):
-                target = match.group()
-                key = match.group(1)
-                arg = match.group(2)
-                if key in self.__procedures:
-                    result = result.replace(target, self.__procedures[key](arg))
-            return result
-
         line = self.__lines[self.__index]
-        return Line(line.t, replace(line.info), replace(line.content))
+        return Line(line.t, self.__replace(line.info), self.__replace(line.content))
 
     def goto(self, index: int) -> None:
         "Goes to a specific line of the dialogue."
@@ -163,21 +163,22 @@ class Dialogue:
 
     def choices(self) -> List[str]:
         """Returns the choices of a menu line if the current line of the dialogue is a menu line."""
-        line = self.line()
+        line = self.__lines[self.__index]
         if line.t == MENU_LINE:
-            return split(line.content)
+            return split(self.__replace(line.content))
         return []
 
     def choose(self, choice: int) -> None:
         """Chooses a label from the current menu line and jumps to it."""
-        self.jump(split(self.line().info)[choice])
+        info = self.__lines[self.__index].info
+        self.jump(split(self.__replace(info))[choice])
 
     def __update(self) -> None:
         """Updates the dialogue state."""
         # Calling update should not call procedures
-        # when a text line is processed.
+        # when a text or menu line is processed.
         line = self.__lines[self.__index]
-        if line.t != TEXT_LINE:
+        if line.t != TEXT_LINE and line.t != MENU_LINE:
             line = self.line()
         # Do something for some types.
         if line.t == LABEL_LINE or line.t == COMMENT_LINE:
@@ -198,7 +199,14 @@ class Dialogue:
             self.next()
         elif line.t == CHECK_LINE:
             value = calc(line.content)
-            if value is not None and value != 0.0:
+            if value is None:
+                # Do string comparison if calc failed.
+                args = line.content.split("=")
+                if len(args) == 2 and args[0].strip() == args[1].strip():
+                    self.next()
+                else:
+                    self.goto(self.__index + 2)
+            elif value != 0.0:
                 self.next()
             else:
                 self.goto(self.__index + 2)
