@@ -28,11 +28,11 @@ class Line:
 
         Each line has a type and some information that defines how its content will be used by a system.
         """
-        self.t = t
+        self.t: int = t
         """The line type."""
-        self.info = info
+        self.info: str = info
         """The line info."""
-        self.content = content
+        self.content: str = content
         """The content of the line."""
 
     def __repr__(self) -> str:

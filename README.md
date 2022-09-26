@@ -36,9 +36,14 @@ while not d.has_end():
     d.next()
 ```
 
+## 📖 Documentation
+
+The API documentation can be found in the docs folder.
+You can read it by opening the index.html file with your web browser.
+
 ## 📦 Installation
 
-Install the package globally.
+Copy and paste the following commands into your terminal.
 Windows users may have to write python instead of python3.
 
 ```sh
