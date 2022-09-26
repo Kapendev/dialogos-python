@@ -1,4 +1,4 @@
-from itertools import combinations, permutations
+from itertools import permutations
 from dialogos import *
 
 
@@ -25,7 +25,7 @@ def test_calc_for_some() -> None:
         "(53 + 23 / (78 + 14 * (94 * 2) + 3))",
     )
     ops = ("+", "*")
-    for l, r in combinations(values, 2):
+    for l, r in permutations(values, 2):
         for op in ops:
             s = f"{l}{op}{r}"
             n1 = calc(l)
@@ -41,8 +41,8 @@ def test_calc_for_some() -> None:
 
 
 def test_split() -> None:
-    assert split("") == []
-    assert split("      orb|| bro  ") == ["orb", " bro"]
+    assert split("") == [""]
+    assert split("   orb|| bro  ") == ["orb", " bro"]
 
 
 # TODO: Test the dialogue struct.

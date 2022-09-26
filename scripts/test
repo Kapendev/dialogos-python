@@ -1,0 +1,5 @@
+#!/bin/env sh
+
+# Tests a Python project with pytest.
+
+python3 -m pytest
