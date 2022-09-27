@@ -2,21 +2,16 @@
 
 # Cleans a Python project.
 
-name=dialogos
+project=${0%/*}/..
 
-path=$(pwd)
-while :; do
-    if [ -f $path/README.md ]; then
-        cd $path
-        [ -d build ] && rm -rf build
-        [ -d $name.egg-info ] && rm -rf $name.egg-info
-        [ -d .mypy_cache ] && rm -rf .mypy_cache
-        [ -d dialogos/__pycache__ ] && rm -rf dialogos/__pycache__
-        exit
-    fi
-    path=$path/..
-    if [ ! -d $path ]; then
-        echo "Working directory must be inside a Python project."
-        exit
-    fi
-done
+srm() {
+    [ -e $1 ] && rm -rf $1
+}
+
+cd $project
+srm .mypy_cache
+srm .pytest_cache
+srm dialogos/__pycache__
+srm tests/__pycache__
+srm build
+srm .egg-info

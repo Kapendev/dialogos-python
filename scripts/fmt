@@ -2,17 +2,7 @@
 
 # Formats a Python project with black.
 
-command='black'
+project=${0%/*}/..
 
-path=$(pwd)
-while :; do
-    if [ -f $path/README.md ]; then
-        $command $path
-        exit
-    fi
-    path=$path/..
-    if [ ! -d $path ]; then
-        echo "Working directory must be inside a Python project."
-        exit
-    fi
-done
+cd $project
+black .

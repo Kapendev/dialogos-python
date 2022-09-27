@@ -2,4 +2,7 @@
 
 # Tests a Python project with pytest.
 
-python3 -m pytest
+project=${0%/*}/..
+
+cd $project
+python3 -m pytest .

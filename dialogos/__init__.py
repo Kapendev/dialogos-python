@@ -36,9 +36,7 @@ class Line:
         """The content of the line."""
 
     def __repr__(self) -> str:
-        return "Line(t: {}, info: '{}', content: '{}')".format(
-            self.t, self.info, self.content
-        )
+        return f"Line(t: {self.t}, info: '{self.info}', content: '{self.content}')"
 
 
 class Dialogue:
@@ -61,9 +59,7 @@ class Dialogue:
             self.change_lines(lines)
 
     def __repr__(self) -> str:
-        return "Dialogue(index: {}, lines: {}, labels: {}, variables: {})".format(
-            self.__index, self.__lines, self.__labels, self.__variables
-        )
+        return f"Dialogue(index: {self.__index}, lines: {self.__lines}, labels: {self.__labels}, variables: {self.__variables})"
 
     def add_variables(self, new: Dict[str, str]) -> "Dialogue":
         """Adds new variables to the dialogue."""

@@ -43,6 +43,3 @@ def test_calc_for_some() -> None:
 def test_split() -> None:
     assert split("") == [""]
     assert split("   orb|| bro  ") == ["orb", " bro"]
-
-
-# TODO: Test the dialogue struct.
